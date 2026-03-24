@@ -1,71 +1,69 @@
 #!/usr/bin/python3
 
 # INET4031
-# Your Name
-# Data Created
-# Date Last Modified
+# Anthony Pham
+# Data Created: 04/23/2026
+# Date Last Modified: 04/23/2026
 
-#REPLACE THIS COMMENT - identify what each of these imports is for.
-import os
-import re
-import sys
+import os # Gives Python the ability to run OS commands
+import re # Regular expressions, used here for matching strings to detect comment lines
+import sys # Gives Python access to Linux-specific parameters and functions like stdin
 
-#YOUR CODE SHOULD HAVE NONE OF THE INSTRUCTORS COMMENTS REMAINING WHEN YOU ARE FINISHED
-#PLEASE REPLACE INSTRUCTOR "PROMPTS" WITH COMMENTS OF YOUR OWN
 
 def main():
     for line in sys.stdin:
 
-        #REPLACE THIS COMMENT - this "regular expression" is searching for the presence of a character - what is it and why?
-        #The important part is WHY it is looking for a particular characer - what is that character being used for?
+        # Boolean value that's true if the line starts with a '#'. 
+	# This marks the line as a comment, ignoring the contents for that line for processing.
         match = re.match("^#",line)
 
-        #REPLACE THIS COMMENT - why is the code doing this?
+        # Cleans up each field in the line by clearing whitespace and removing the ':' delimiter used to separate each field,
+	# and puts those fields in an array.
         fields = line.strip().split(':')
 
-        #REPLACE THESE COMMENTS with a single comment describing the logic of the IF 
-        #what would an appropriate comment be for describing what this IF statement is checking for?
-        #what happens if the IF statement evaluates to true?
-        #how does this IF statement rely on what happened in the prior two lines of code? The match and fields lines.
-        #the code clearly shows that the variables match and the length of fields is being checked for being != 5  so why is it doing that?
+        # Continues this iteration of the for loop, skipping the rest of the for loop for this line if:
+	# - 'match' is true, which signifies that this line starts with a '#' and should be treated as a comment and have its contents be ignored
+	# - The length of the 'fields' array isn't exactly 5, meaning that there's too much or too little fields for processing 
         if match or len(fields) != 5:
             continue
 
-        #REPLACE THIS COMMENT - what is the purpose of the next three lines. How does it relate to what is stored in the passwd file?
+        # Extracts user details from the parsed fields and places them into their respective /etc/passwd fields:
+	# field[0] = username, field[1] = password, field[3] = first name, and field[2] = last name.
         username = fields[0]
         password = fields[1]
         gecos = "%s %s,,," % (fields[3],fields[2])
 
-        #REPLACE THIS COMMENT - why is this split being done?
+        # Splits field 5 (groups) by comma to get a list of individual group names that the user could be assigned to. 
         groups = fields[4].split(',')
 
-        #REPLACE THIS COMMENT - what is the point of this print statement?
+	# Updates on the automation status by printing to terminal that the account is being made for 'username'
         print("==> Creating account for %s..." % (username))
-        #REPLACE THIS COMMENT - what is this line doing?  What will the variable "cmd" contain.
+        # Builds the adduser command to create the account without asking for a password, and passes the gecos details and username as the arguments.
         cmd = "/usr/sbin/adduser --disabled-password --gecos '%s' %s" % (gecos,username)
 
-        #REMOVE THIS COMMENT AFTER YOU UNDERSTAND WHAT TO DO - these statements are currently "commented out" as talked about in class
-        #The first time you run the code...what should you do here?  If uncommented - what will the os.system(cmd) statemetn attempt to do?
-        #print(cmd)
-        #os.system(cmd)
+	# Shows the command to be executed to the terminal and has the system run that command.
+        print(cmd)
+        os.system(cmd)
 
-        #REPLACE THIS COMMENT - what is the point of this print statement?
+        # Updates on the status, saying to the terminal that the password is being set for the account
         print("==> Setting the password for %s..." % (username))
-        #REPLACE THIS COMMENT - what is this line doing?  What will the variable "cmd" contain. You'll need to lookup what these linux commands do.
+        # Builds the passwd command to set the account's password. 'echo -ne' pipes the password twice (the second time is for the confirmation) into 'passwd'.
+	# The sudo command is needed since passwd requires superuser privileges.
         cmd = "/bin/echo -ne '%s\n%s' | /usr/bin/sudo /usr/bin/passwd %s" % (password,password,username)
 
-        #REMOVE THIS COMMENT AFTER YOU UNDERSTAND WHAT TO DO - these statements are currently "commented out" as talked about in class
-        #The first time you run the code...what should you do here?  If uncommented - what will the os.system(cmd) statemetn attempt to do?
-        #print(cmd)
-        #os.system(cmd)
+	# Shows the command to be executed to the terminal and has the system run that command.
+        print(cmd)
+        os.system(cmd)
 
         for group in groups:
-            #REPLACE THIS COMMENT with one that answers "What is this IF statement looking for and why? If group !='-' what happens?"
+            # A '-' in the groups field signifies that no additional groups are needed to be assigned to the user.
+	    # Anything else is treated as a group name and the user gets added to it.
             if group != '-':
                 print("==> Assigning %s to the %s group..." % (username,group))
                 cmd = "/usr/sbin/adduser %s %s" % (username,group)
-                #print(cmd)
-                #os.system(cmd)
+                print(cmd)
+                os.system(cmd)
 
 if __name__ == '__main__':
     main()
+
