@@ -32,9 +32,12 @@ To run the script:
 4. Run the command in the shell.
    >sudo ./create-users.py < createusers.input
 
-If you wish to do a "dry run", **be sure to comment out *every* line containing** *"os.system(cmd)"* using a text editor. This is especially important since you do not want to accidentally add users to your system during your dry run that you'll end up having to delete. 
+If you wish to do a "dry run", **be sure to comment out *every* line in the script containing** *"os.system(cmd)"* using a text editor. This is especially important since you do not want to accidentally add users to your system during your dry run that you'll end up having to delete. 
 
-Alternatively, you can run the *create-users2.py* script and follow its prompts. Note that you *should not* redirect the input file when running the command.
+Alternatively, you can run the *create-users2.py* script and follow its prompts. Note that you *should not* redirect the input file when running the command. Running the command
+> sudo ./create-users2.py
+>
+will suffice. This version of the script with "Dry-Run Mode" on will output the commands that would've been executed in a real run without actually having the system execute them.
    
 
 
