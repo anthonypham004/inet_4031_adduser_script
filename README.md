@@ -38,6 +38,3 @@ Alternatively, you can run the *create-users2.py* script and follow its prompts.
 > sudo ./create-users2.py
 >
 will suffice. This version of the script with "Dry-Run Mode" on will output the commands that would've been executed in a real run without actually having the system execute them.
-   
-
-<<<<<<< HEAD
