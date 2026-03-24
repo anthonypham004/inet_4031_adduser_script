@@ -34,7 +34,7 @@ To run the script:
 
 If you wish to do a "dry run", **be sure to comment out *every* line containing** *"os.system(cmd)"* using a text editor. This is especially important since you do not want to accidentally add users to your system during your dry run that you'll end up having to delete. 
 
-Alternatively, you can run the *create-users2.py* script and follow its prompts.
+Alternatively, you can run the *create-users2.py* script and follow its prompts. Note that you *should not* redirect the input file when running the command.
    
 
 
